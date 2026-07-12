@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>I ricordi di Antonio e Caterina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#20291F;
+    --bg-deep:#161D15;
+    --card:#F6EFE3;
+    --gold:#C6A24B;
+    --gold-light:#E4C97A;
+    --blush:#E3B4A6;
+    --cream:#F5EFE2;
+    --ink:#2A241C;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 50% -8%, rgba(198,162,75,0.16), transparent 55%),
+      radial-gradient(circle at 8% 100%, rgba(227,180,166,0.08), transparent 45%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+    color:var(--cream);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:52px 20px 44px;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  /* Decorative botanical corners */
+  .branch{
+    position:absolute;
+    width:150px;
+    height:150px;
+    opacity:0.35;
+    pointer-events:none;
+    color:var(--gold);
+  }
+  .branch-tl{ top:18px; left:-10px; transform:scaleX(1); }
+  .branch-tr{ top:18px; right:-10px; transform:scaleX(-1); }
+  .branch-bl{ bottom:10px; left:-10px; transform:scaleX(1) scaleY(-1); }
+  .branch-br{ bottom:10px; right:-10px; transform:scaleX(-1) scaleY(-1); }
+
+  .monogram{
+    width:76px;
+    height:76px;
+    border:1.2px solid var(--gold);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+    position:relative;
+    opacity:0;
+    animation:fadeIn .7s ease .05s forwards;
+  }
+  .monogram::before{
+    content:"";
+    position:absolute;
+    inset:6px;
+    border:1px solid rgba(198,162,75,0.5);
+    border-radius:50%;
+  }
+  .monogram span{
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:22px;
+    color:var(--gold-light);
+    letter-spacing:1px;
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    color:var(--gold-light);
+    letter-spacing:3.5px;
+    font-size:11.5px;
+    text-transform:uppercase;
+    font-weight:600;
+    margin-bottom:16px;
+    opacity:0;
+    animation:fadeIn .6s ease .15s forwards;
+  }
+  .eyebrow::before, .eyebrow::after{
+    content:"";
+    width:22px;
+    height:1px;
+    background:var(--gold);
+    opacity:0.7;
+  }
+
+  h1{
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-weight:600;
+    font-size:clamp(34px, 8vw, 54px);
+    line-height:1.18;
+    text-align:center;
+    margin:0 0 6px;
+    max-width:480px;
+    opacity:0;
+    animation:fadeIn .6s ease .25s forwards;
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--gold-light);
+    font-weight:500;
+  }
+
+  .occasion{
+    text-align:center;
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-style:italic;
+    font-size:18px;
+    color:rgba(227,180,166,0.85);
+    letter-spacing:0.5px;
+    margin:0 0 22px;
+    opacity:0;
+    animation:fadeIn .6s ease .32s forwards;
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 26px;
+    opacity:0;
+    animation:fadeIn .6s ease .38s forwards;
+  }
+  .divider span{
+    width:34px;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .divider i{
+    width:5px;
+    height:5px;
+    background:var(--gold-light);
+    transform:rotate(45deg);
+    display:block;
+  }
+
+  .subtitle{
+    text-align:center;
+    max-width:340px;
+    color:rgba(245,239,226,0.62);
+    font-size:14.5px;
+    line-height:1.65;
+    margin:0 0 36px;
+    opacity:0;
+    animation:fadeIn .6s ease .42s forwards;
+  }
+
+  /* Signature: framed keepsake card */
+  .postcard{
+    position:relative;
+    width:min(84vw, 300px);
+    background:var(--card);
+    border-radius:4px;
+    padding:20px 20px 28px;
+    box-shadow:0 22px 48px rgba(0,0,0,0.45);
+    transform:rotate(-1.5deg);
+    opacity:0;
+    animation:fadeIn .7s ease .5s forwards, float 5.5s ease-in-out 1.2s infinite;
+    margin-bottom:34px;
+    border:1px solid rgba(198,162,75,0.3);
+  }
+  .postcard::before{
+    content:"";
+    position:absolute;
+    inset:8px;
+    border:1px solid rgba(42,36,28,0.14);
+    pointer-events:none;
+  }
+
+  .postcard-frame{
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:2px;
+    background:
+      linear-gradient(135deg, rgba(227,180,166,0.4), rgba(198,162,75,0.4)),
+      repeating-linear-gradient(45deg, rgba(42,36,28,0.06) 0 2px, transparent 2px 14px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:14px;
+  }
+
+  .postcard-frame svg{
+    width:50px;
+    height:50px;
+    color:var(--ink);
+    opacity:0.55;
+  }
+
+  .postcard-label{
+    color:var(--ink);
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-style:italic;
+    font-size:16px;
+    text-align:center;
+    margin:0;
+  }
+
+  .cta-group{
+    display:flex;
+    flex-direction:column;
+    gap:13px;
+    width:min(84vw, 300px);
+    opacity:0;
+    animation:fadeIn .6s ease .58s forwards;
+  }
+
+  .cta{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    text-decoration:none;
+    padding:15px 22px;
+    border-radius:999px;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    font-size:14.5px;
+    font-weight:600;
+    letter-spacing:0.2px;
+  }
+  .cta:hover{ transform:translateY(-2px); }
+  .cta:active{ transform:translateY(0); }
+  .cta:focus-visible{ outline:2px solid var(--blush); outline-offset:3px; }
+
+  .cta-primary{
+    background:linear-gradient(135deg, var(--gold-light), var(--gold));
+    color:#20291F;
+    box-shadow:0 10px 26px rgba(198,162,75,0.28);
+  }
+  .cta-primary:hover{ box-shadow:0 14px 30px rgba(198,162,75,0.38); }
+
+  .cta-secondary{
+    background:transparent;
+    color:var(--cream);
+    border:1px solid rgba(245,239,226,0.28);
+  }
+  .cta-secondary:hover{ border-color:var(--gold-light); color:var(--gold-light); }
+
+  .fallback-hint{
+    max-width:290px;
+    text-align:center;
+    font-size:12px;
+    color:rgba(245,239,226,0.4);
+    margin:16px 0 0;
+    line-height:1.6;
+    font-style:italic;
+    font-family:'Cormorant Garamond', Georgia, serif;
+  }
+
+  .steps{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    max-width:320px;
+    width:100%;
+    margin-top:52px;
+    opacity:0;
+    animation:fadeIn .6s ease .66s forwards;
+  }
+
+  .step{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    font-size:13.5px;
+    line-height:1.55;
+    color:rgba(245,239,226,0.75);
+  }
+
+  .step-number{
+    flex:none;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    border:1px solid var(--gold);
+    color:var(--gold-light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-style:italic;
+    font-size:12.5px;
+    margin-top:1px;
+  }
+
+  footer{
+    margin-top:54px;
+    text-align:center;
+    color:rgba(245,239,226,0.35);
+    font-size:12px;
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-style:italic;
+    opacity:0;
+    animation:fadeIn .6s ease .74s forwards;
+  }
+  footer span{ color:var(--blush); font-style:normal; }
+
+  @keyframes fadeIn{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes float{
+    0%,100%{ transform:rotate(-1.5deg) translateY(0); }
+    50%{ transform:rotate(-1.5deg) translateY(-6px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; }
+  }
+</style>
+</head>
+<body>
+
+  <svg class="branch branch-tl" viewBox="0 0 150 150" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+    <path d="M5 5 C 30 20, 40 40, 35 70"/>
+    <path d="M12 15 C 20 12, 26 8, 30 2"/>
+    <path d="M20 30 C 30 28, 38 24, 42 16"/>
+    <path d="M27 48 C 37 46, 45 42, 50 34"/>
+    <path d="M33 65 C 43 64, 51 60, 56 52"/>
+    <circle cx="30" cy="3" r="2"/>
+    <circle cx="43" cy="15" r="2"/>
+    <circle cx="51" cy="33" r="2"/>
+  </svg>
+  <svg class="branch branch-tr" viewBox="0 0 150 150" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+    <path d="M5 5 C 30 20, 40 40, 35 70"/>
+    <path d="M12 15 C 20 12, 26 8, 30 2"/>
+    <path d="M20 30 C 30 28, 38 24, 42 16"/>
+    <path d="M27 48 C 37 46, 45 42, 50 34"/>
+    <path d="M33 65 C 43 64, 51 60, 56 52"/>
+    <circle cx="30" cy="3" r="2"/>
+    <circle cx="43" cy="15" r="2"/>
+    <circle cx="51" cy="33" r="2"/>
+  </svg>
+  <svg class="branch branch-bl" viewBox="0 0 150 150" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+    <path d="M5 5 C 30 20, 40 40, 35 70"/>
+    <path d="M12 15 C 20 12, 26 8, 30 2"/>
+    <path d="M20 30 C 30 28, 38 24, 42 16"/>
+    <circle cx="30" cy="3" r="2"/>
+    <circle cx="43" cy="15" r="2"/>
+  </svg>
+  <svg class="branch branch-br" viewBox="0 0 150 150" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+    <path d="M5 5 C 30 20, 40 40, 35 70"/>
+    <path d="M12 15 C 20 12, 26 8, 30 2"/>
+    <path d="M20 30 C 30 28, 38 24, 42 16"/>
+    <circle cx="30" cy="3" r="2"/>
+    <circle cx="43" cy="15" r="2"/>
+  </svg>
+
+  <div class="monogram"><span>A&nbsp;&amp;&nbsp;C</span></div>
+
+  <div class="eyebrow">un giorno da custodire insieme</div>
+  <h1>I ricordi di<br><em>Antonio &amp; Caterina</em></h1>
+  <p class="occasion">— Matrimonio —</p>
+
+  <div class="divider"><span></span><i></i><span></span></div>
+
+  <p class="subtitle">Ogni foto e ogni video che lasci qui restano per sempre, un pezzo del nostro giorno visto con i tuoi occhi.</p>
+
+  <div class="postcard">
+    <div class="postcard-frame">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2"/>
+        <circle cx="9" cy="10" r="2"/>
+        <path d="M21 15l-4.5-4.5a2 2 0 0 0-2.8 0L5 19"/>
+      </svg>
+    </div>
+    <p class="postcard-label">Un attimo, un sorriso, un ricordo</p>
+  </div>
+
+  <div class="cta-group">
+    <!-- METODO 1: sostituisci con il link della cartella Drive principale (account dedicato) -->
+    <a class="cta cta-primary" href="https://drive.google.com/drive/folders/SOSTITUISCI_LINK_DRIVE_1" target="_blank" rel="noreferrer">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 19h14"/>
+      </svg>
+      Carica la tua foto
+    </a>
+
+    <!-- METODO 2: sostituisci con il link della seconda cartella Drive (backup) -->
+    <a class="cta cta-secondary" href="https://drive.google.com/drive/folders/SOSTITUISCI_LINK_DRIVE_2" target="_blank" rel="noreferrer">
+      Non funziona? Prova qui
+    </a>
+
+    <!-- METODO 3: sostituisci con il link del gruppo/servizio di riserva -->
+    <a class="cta cta-secondary" href="https://SOSTITUISCI_LINK_METODO_3" target="_blank" rel="noreferrer">
+      Ancora problemi? Ultima opzione
+    </a>
+  </div>
+  <p class="fallback-hint">Prova sempre il primo. Gli altri sono qui solo per sicurezza.</p>
+
+  <div class="steps">
+    <div class="step">
+      <span class="step-number">1</span>
+      <span>Tocca il pulsante sopra: si apre la nostra raccolta condivisa.</span>
+    </div>
+    <div class="step">
+      <span class="step-number">2</span>
+      <span>Carica la foto o il video dal tuo telefono.</span>
+    </div>
+    <div class="step">
+      <span class="step-number">3</span>
+      <span>Fatto! Il tuo ricordo si unisce a quello di tutti i nostri cari.</span>
+    </div>
+  </div>
+
+  <footer>con gratitudine, <span>Antonio &amp; Caterina</span></footer>
+
+</body>
+</html>
